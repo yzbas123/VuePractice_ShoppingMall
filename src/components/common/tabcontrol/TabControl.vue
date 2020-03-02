@@ -30,6 +30,7 @@ export default {
   methods: {
     itemclick(index) {
       this.currentIndex = index;
+      this.$emit("tabitemclick", index);
     }
   }
 };
@@ -43,13 +44,13 @@ export default {
   line-height: 44px;
   font-size: 15px;
 }
-.tabitem>span {
-    padding: 5px;
+.tabitem > span {
+  padding: 5px;
 }
-.active{
-    color: var(--color-high-text);
+.active {
+  color: var(--color-high-text);
 }
-.active>span{
-     border-bottom: 3px solid var(--color-high-text);
+.active > span {
+  border-bottom: 3px solid var(--color-high-text);
 }
 </style>

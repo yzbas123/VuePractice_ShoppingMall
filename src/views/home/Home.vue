@@ -4,127 +4,34 @@
     <nav-bar class="navbar">
       <template v-slot:center>购物街</template>
     </nav-bar>
-    <!-- 首页轮播图 -->
-    <home-swiper :banners="banners"></home-swiper>
-    <!-- 推荐 -->
-    <recommend-view :recommends="recommends"></recommend-view>
-    <!-- 特色栏 -->
-    <feature-view></feature-view>
-    <!-- 列表控制栏 -->
-    <tab-control :titles="['流行','新款','精选']" class="tabcontrol"></tab-control>
-    <!-- 占位用的,后面删除 -->
-    <ul>
-      <li>sdfsdfsdf1</li>
-      <li>sdfsdfsdf2</li>
-      <li>sdfsdfsdf3</li>
-      <li>sdfsdfsdf4</li>
-      <li>sdfsdfsdf5</li>
-      <li>sdfsdfsdf6</li>
-      <li>sdfsdfsdf7</li>
-      <li>sdfsdfsdf8</li>
-      <li>sdfsdfsdf9</li>
-      <li>sdfsdfsdf10</li>
-      <li>sdfsdfsdf11</li>
-      <li>sdfsdfsdf12</li>
-      <li>sdfsdfsdf13</li>
-      <li>sdfsdfsdf14</li>
-      <li>sdfsdfsdf15</li>
-      <li>sdfsdfsdf16</li>
-      <li>sdfsdfsdf17</li>
-      <li>sdfsdfsdf18</li>
-      <li>sdfsdfsdf19</li>
-      <li>sdfsdfsdf20</li>
-      <li>sdfsdfsdf21</li>
-      <li>sdfsdfsdf22</li>
-      <li>sdfsdfsdf23</li>
-      <li>sdfsdfsdf24</li>
-      <li>sdfsdfsdf25</li>
-      <li>sdfsdfsdf26</li>
-      <li>sdfsdfsdf27</li>
-      <li>sdfsdfsdf28</li>
-      <li>sdfsdfsdf29</li>
-      <li>sdfsdfsdf30</li>
-      <li>sdfsdfsdf31</li>
-      <li>sdfsdfsdf32</li>
-      <li>sdfsdfsdf33</li>
-      <li>sdfsdfsdf34</li>
-      <li>sdfsdfsdf35</li>
-      <li>sdfsdfsdf36</li>
-      <li>sdfsdfsdf37</li>
-      <li>sdfsdfsdf38</li>
-      <li>sdfsdfsdf39</li>
-      <li>sdfsdfsdf40</li>
-      <li>sdfsdfsdf41</li>
-      <li>sdfsdfsdf42</li>
-      <li>sdfsdfsdf43</li>
-      <li>sdfsdfsdf44</li>
-      <li>sdfsdfsdf45</li>
-      <li>sdfsdfsdf46</li>
-      <li>sdfsdfsdf47</li>
-      <li>sdfsdfsdf48</li>
-      <li>sdfsdfsdf49</li>
-      <li>sdfsdfsdf50</li>
-      <li>sdfsdfsdf51</li>
-      <li>sdfsdfsdf52</li>
-      <li>sdfsdfsdf53</li>
-      <li>sdfsdfsdf54</li>
-      <li>sdfsdfsdf55</li>
-      <li>sdfsdfsdf56</li>
-      <li>sdfsdfsdf57</li>
-      <li>sdfsdfsdf58</li>
-      <li>sdfsdfsdf59</li>
-      <li>sdfsdfsdf60</li>
-      <li>sdfsdfsdf61</li>
-      <li>sdfsdfsdf62</li>
-      <li>sdfsdfsdf63</li>
-      <li>sdfsdfsdf64</li>
-      <li>sdfsdfsdf65</li>
-      <li>sdfsdfsdf66</li>
-      <li>sdfsdfsdf67</li>
-      <li>sdfsdfsdf68</li>
-      <li>sdfsdfsdf69</li>
-      <li>sdfsdfsdf70</li>
-      <li>sdfsdfsdf71</li>
-      <li>sdfsdfsdf72</li>
-      <li>sdfsdfsdf73</li>
-      <li>sdfsdfsdf74</li>
-      <li>sdfsdfsdf75</li>
-      <li>sdfsdfsdf76</li>
-      <li>sdfsdfsdf77</li>
-      <li>sdfsdfsdf78</li>
-      <li>sdfsdfsdf79</li>
-      <li>sdfsdfsdf80</li>
-      <li>sdfsdfsdf81</li>
-      <li>sdfsdfsdf82</li>
-      <li>sdfsdfsdf83</li>
-      <li>sdfsdfsdf84</li>
-      <li>sdfsdfsdf85</li>
-      <li>sdfsdfsdf86</li>
-      <li>sdfsdfsdf87</li>
-      <li>sdfsdfsdf88</li>
-      <li>sdfsdfsdf89</li>
-      <li>sdfsdfsdf90</li>
-      <li>sdfsdfsdf91</li>
-      <li>sdfsdfsdf92</li>
-      <li>sdfsdfsdf93</li>
-      <li>sdfsdfsdf94</li>
-      <li>sdfsdfsdf95</li>
-      <li>sdfsdfsdf96</li>
-      <li>sdfsdfsdf97</li>
-      <li>sdfsdfsdf98</li>
-      <li>sdfsdfsdf99</li>
-      <li>sdfsdfsdf100</li>
-    </ul>
+    <!-- 下面的组件被包含在scroll组件中 -->
+    <scroll class="wrapped">
+      <!-- 首页轮播图 -->
+      <home-swiper :banners="banners"></home-swiper>
+      <!-- 推荐 -->
+      <recommend-view :recommends="recommends"></recommend-view>
+      <!-- 特色栏 -->
+      <feature-view></feature-view>
+      <!-- 列表控制栏 -->
+      <tab-control :titles="['流行','新款','精选']" class="tabcontrol" @tabitemclick="tabItemClick"></tab-control>
+      <!-- 商品信息列表 -->
+      <goods-list :goods="goods[currentType].list"></goods-list>
+    </scroll>
   </div>
 </template>
 
 <script>
+/* 界面相关的组件 */
 import NavBar from "common/navbar/NavBar";
 import HomeSwiper from "./childview/HomeSwiper.vue";
 import RecommendView from "./childview/RecommendView";
 import FeatureView from "./childview/FeatureView";
 import TabControl from "common/tabcontrol/TabControl";
-import { getHomeDatas } from "network/home.js";
+import GoodsList from "content/GoodsList";
+import Scroll from "content/Scroll";
+
+/* 网络请求方法 */
+import { getHomeDatas, getHomeGoods } from "network/home.js";
 
 export default {
   name: "Home",
@@ -133,32 +40,93 @@ export default {
     HomeSwiper,
     RecommendView,
     FeatureView,
-    TabControl
+    TabControl,
+    GoodsList,
+    Scroll
   },
   data() {
     return {
       banners: [],
-      recommends: []
+      recommends: [],
+      goods: {
+        pop: { page: 1, list: [] },
+        new: { page: 1, list: [] },
+        sell: { page: 1, list: [] }
+      },
+      currentType: "pop"
     };
   },
   created() {
     // 组件一旦创建便发送请求,调用getHomeDatas获取主页的数据
-    getHomeDatas()
-      .then(res => {
-        this.banners = res.data.banner.list;
-        this.recommends = res.data.recommend.list;
-        console.log(this.recommends);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.getHomeDatasLocal();
+    //请求流行类商品数据
+    this.getHomeGoodsLocal("pop");
+    //请求最新类商品数据
+    this.getHomeGoodsLocal("new");
+    //请求热销类商品数据
+    this.getHomeGoodsLocal("sell");
+  },
+
+  methods: {
+    tabItemClick(index) {
+      switch (index) {
+        case 0:
+          this.currentType = "pop";
+          break;
+        case 1:
+          this.currentType = "new";
+          break;
+        case 2:
+          this.currentType = "sell";
+          break;
+      }
+    },
+    getHomeDatasLocal() {
+      getHomeDatas()
+        .then(res => {
+          if (res.data) {
+            // TODO: 这些数据有可能会因为接口改变而导致值为null,需要进行非空判断的
+            this.banners = res.data.banner.list;
+            this.recommends = res.data.recommend.list;
+          } else {
+            console.log(res);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    getHomeGoodsLocal(type) {
+      // 每次请求都是增加一页的数据,所以页数索引在请求数据时需要自增1
+      // 填入类型 和 页数 到 请求方法中.
+      getHomeGoods(type, this.goods[type].page++)
+        .then(res => {
+          if (res.data) {
+            if (res.data.list) {
+              // ...res.data.list可以将对应的数据全部解析出来传入push中
+              // 然后push将这些数据追加到this.goods[type].list这个数组后面
+              this.goods[type].list.push(...res.data.list);
+            } else {
+              console.log(res.data);
+            }
+          } else {
+            console.log(res);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 };
 </script>
 
-<style>
+<style scoped>
 #home {
   padding-top: 44px;
+  position: relative;
+  /* height equals 100% viewport height */
+  height: 100vh;
 }
 .navbar {
   background-color: var(--color-tint);
@@ -170,8 +138,16 @@ export default {
   z-index: 9;
 }
 .tabcontrol {
-  position: sticky;
+  /* position: sticky; */
   top: 44px;
   background-color: #fff;
+  z-index: 9;
+}
+.wrapped {
+  position:absolute;
+  top: 44px;
+  bottom: 49px;
+  right: 0px;
+  left: 0px;
 }
 </style>
