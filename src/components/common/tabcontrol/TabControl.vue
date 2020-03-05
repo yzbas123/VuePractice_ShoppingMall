@@ -36,13 +36,14 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .tabcontrol {
   display: flex;
   text-align: center;
   height: 44px;
   line-height: 44px;
   font-size: 15px;
+  background-color: #fff
 }
 .tabitem > span {
   padding: 5px;

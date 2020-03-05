@@ -11,7 +11,6 @@ export function getHomeDatas() {
 
 export function getHomeGoods(type, page) {
     return request({
-        // baseURL:'http://123.207.32.32:8000/api/wh',
         url: '/home/data',
         params: {
             page,

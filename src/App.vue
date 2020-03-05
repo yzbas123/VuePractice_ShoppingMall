@@ -7,6 +7,7 @@
 
 <script>
 import MainTabBar from "content/MainTabBar";
+
 export default {
   name: "App",
   components: {

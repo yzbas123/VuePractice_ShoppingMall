@@ -1,6 +1,8 @@
 <template>
   <div class="goods">
-    <a :href="good.link"><img :src="good.show.img" class="good_img" /></a>
+    <a :href="good.link">
+      <img :src="good.show.img" class="good_img" @load="imageLoaded" />
+    </a>
     <div class="goods-info">
       <p>{{good.title}}</p>
       <span class="price">{{good.price}}</span>
@@ -17,6 +19,12 @@ export default {
       default() {
         return {};
       }
+    }
+  },
+  methods: {
+    imageLoaded() {
+      /* 图片加载完毕时，在事件总线中组成自定义事件 */
+      this.$bus.$emit("imageLoaded");
     }
   }
 };

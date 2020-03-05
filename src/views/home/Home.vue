@@ -4,19 +4,36 @@
     <nav-bar class="navbar">
       <template v-slot:center>购物街</template>
     </nav-bar>
+    <!-- 列表控制栏1 -->
+    <tab-control
+      :titles="['流行','新款','精选']"
+      class="tab-control"
+      ref="tabcontrol1"
+      @tabitemclick="tabItemClick"
+      v-show="canDisplay"
+    ></tab-control>
     <!-- 下面的组件被包含在scroll组件中 -->
-    <scroll class="wrapped">
+    <scroll
+      class="content"
+      ref="scroll"
+      :probe-type="3"
+      @scrolling="scrolling"
+      :pull-up-load="true"
+      @pullingUp="pullupload"
+    >
       <!-- 首页轮播图 -->
-      <home-swiper :banners="banners"></home-swiper>
+      <home-swiper :banners="banners" @swiperImgLoaded.once="swiperImgLoaded"></home-swiper>
       <!-- 推荐 -->
       <recommend-view :recommends="recommends"></recommend-view>
       <!-- 特色栏 -->
       <feature-view></feature-view>
-      <!-- 列表控制栏 -->
-      <tab-control :titles="['流行','新款','精选']" class="tabcontrol" @tabitemclick="tabItemClick"></tab-control>
+      <!-- 列表控制栏2 -->
+      <tab-control :titles="['流行','新款','精选']" ref="tabcontrol2" @tabitemclick="tabItemClick"></tab-control>
       <!-- 商品信息列表 -->
       <goods-list :goods="goods[currentType].list"></goods-list>
+      <!-- 返回到前面的按钮 -->
     </scroll>
+    <tap-back @click.native="tapBackClick" v-show="canshow"></tap-back>
   </div>
 </template>
 
@@ -29,6 +46,7 @@ import FeatureView from "./childview/FeatureView";
 import TabControl from "common/tabcontrol/TabControl";
 import GoodsList from "content/GoodsList";
 import Scroll from "content/Scroll";
+import TapBack from "content/TapBack";
 
 /* 网络请求方法 */
 import { getHomeDatas, getHomeGoods } from "network/home.js";
@@ -42,7 +60,8 @@ export default {
     FeatureView,
     TabControl,
     GoodsList,
-    Scroll
+    Scroll,
+    TapBack
   },
   data() {
     return {
@@ -53,7 +72,10 @@ export default {
         new: { page: 1, list: [] },
         sell: { page: 1, list: [] }
       },
-      currentType: "pop"
+      currentType: "pop",
+      canshow: false,
+      tabctrlOffsetTop: 0,
+      canDisplay: false
     };
   },
   created() {
@@ -66,8 +88,45 @@ export default {
     //请求热销类商品数据
     this.getHomeGoodsLocal("sell");
   },
-
+  mounted() {
+    const refresh = this.debounce(this.$refs.scroll.refresh, 500);
+    // 组件挂载后，监听自定义事件
+    this.$bus.$on("imageLoaded", () => {
+      // 刷新scroll的长度
+      refresh();
+    });
+  },
   methods: {
+    debounce(cb, delay) {
+      let timer = null;
+      return function(...args) {
+        if (timer) {
+          clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+          // cb.apply(this, args);
+          cb(args);
+        }, delay);
+      };
+    },
+
+    pullupload() {
+      /* 请求新的数据填入列表 */
+      this.getHomeGoodsLocal(this.currentType);
+      this.$refs.scroll.continuePullingup();
+    },
+    scrolling(position) {
+      /* 根据y轴上的位移来判断小按钮是否显示 */
+      this.canshow = Math.abs(position.y) > 1000;
+      /* 根据y轴上的位移 与 存储的tabcontrol的位置来判断tabcontrol1是否显示 */
+      // console.log(position.y);
+      // console.log(this.canDisplay);
+
+      this.canDisplay = Math.abs(position.y) > this.tabctrlOffsetTop;
+    },
+    tapBackClick() {
+      this.$refs.scroll.scrollTo(0, 0, 500);
+    },
     tabItemClick(index) {
       switch (index) {
         case 0:
@@ -80,17 +139,22 @@ export default {
           this.currentType = "sell";
           break;
       }
+      this.$refs.tabcontrol1.currentIndex = index;
+      this.$refs.tabcontrol2.currentIndex = index;
+    },
+    swiperImgLoaded() {
+      this.tabctrlOffsetTop = this.$refs.tabcontrol2.$el.offsetTop;
     },
     getHomeDatasLocal() {
       getHomeDatas()
         .then(res => {
-          if (res.data) {
-            // TODO: 这些数据有可能会因为接口改变而导致值为null,需要进行非空判断的
-            this.banners = res.data.banner.list;
-            this.recommends = res.data.recommend.list;
-          } else {
-            console.log(res);
-          }
+          res.data &&
+            res.data.banner &&
+            res.data.banner.list &&
+            (this.banners = res.data.banner.list) &&
+            res.data.recommend &&
+            res.data.recommend.list &&
+            (this.recommends = res.data.recommend.list);
         })
         .catch(err => {
           console.log(err);
@@ -123,31 +187,24 @@ export default {
 
 <style scoped>
 #home {
-  padding-top: 44px;
   position: relative;
   /* height equals 100% viewport height */
   height: 100vh;
 }
+.tab-control {
+  position: relative;
+  z-index: 9;
+}
 .navbar {
   background-color: var(--color-tint);
   color: #fff;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 9;
 }
-.tabcontrol {
-  /* position: sticky; */
-  top: 44px;
-  background-color: #fff;
-  z-index: 9;
-}
-.wrapped {
-  position:absolute;
+.content {
+  position: absolute;
   top: 44px;
   bottom: 49px;
   right: 0px;
   left: 0px;
+  overflow: hidden;
 }
 </style>
