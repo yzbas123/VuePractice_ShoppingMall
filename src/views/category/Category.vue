@@ -125,10 +125,10 @@ export default {
   },
   mounted() {
     const wrap = document.querySelector(".wrap");
-    console.log(wrap);
+    // console.log(wrap);
 
     this.bs = new BScroll(wrap, {});
-    console.log(this.bs);
+    // console.log(this.bs);
   }
 };
 </script>

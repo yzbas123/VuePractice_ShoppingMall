@@ -49,10 +49,15 @@ export default {
       this.scroll.finishPullUp();
     },
     scrollTo(x, y, time = 300) {
+      console.log('scrollTo',y,time);
+
       this.scroll.scrollTo(x, y, time);
     },
     refresh() {
       this.scroll.refresh();
+    },
+    getPositionY() {
+      return this.scroll.y;
     }
   }
 };

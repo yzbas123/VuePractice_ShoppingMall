@@ -75,7 +75,8 @@ export default {
       currentType: "pop",
       canshow: false,
       tabctrlOffsetTop: 0,
-      canDisplay: false
+      canDisplay: false,
+      savedY: 0
     };
   },
   created() {
@@ -125,6 +126,7 @@ export default {
       this.canDisplay = Math.abs(position.y) > this.tabctrlOffsetTop;
     },
     tapBackClick() {
+      console.log(1111);
       this.$refs.scroll.scrollTo(0, 0, 500);
     },
     tabItemClick(index) {
@@ -181,6 +183,17 @@ export default {
           console.log(err);
         });
     }
+  },
+  activated() {
+    console.log("activated:", this.savedY);
+    /*刷新一下滚动条 ,然后跳转到对应位置*/
+    this.$refs.scroll.refresh(); //必须刷新,better-scroll官方文档说keep-alive的缓存机制有可能导致计算高度出错,所以先刷新一下
+    this.$refs.scroll.scrollTo(0, this.savedY, 0);
+  },
+  deactivated() {
+    /* 跳转前,获取当前的滚动位置并保存 */
+    this.savedY = this.$refs.scroll.getPositionY();
+    console.log("deactivated:", this.savedY);
   }
 };
 </script>
