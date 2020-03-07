@@ -14,30 +14,36 @@ Vue.use(VueRouter);
 
 // 2. create router instance
 
-const routes = [{
-    path: '',
-    redirect: '/home'
-},
-{
-    path: '/home',
-    component: Home,
-},
-{
-    path: '/category',
-    component: Category
-},
-{
-    path: '/cart',
-    component: Cart
-},
-{
-    path: '/user',
-    component: User
-},
-{
-    path: '/detail/:iid',
-    component: Detail
-}
+const routes = [
+    {
+        path: '',
+        redirect: '/home'
+    },
+    {
+        path: '/home',
+        name: 'Home',
+        component: Home,
+    },
+    {
+        path: '/category',
+        name: 'Category',
+        component: Category
+    },
+    {
+        path: '/cart',
+        name: "Cart",
+        component: Cart
+    },
+    {
+        path: '/user',
+        name: "User",
+        component: User
+    },
+    {
+        path: '/detail/:iid',
+        name: "Detail",
+        component: Detail
+    }
 ];
 
 const router = new VueRouter({
