@@ -187,8 +187,8 @@ export default {
     /* 打印一下滚动条包裹的内容区域的高度 */
     // console.log(this.$refs.scroll.$el, ":", this.$refs.scroll.$el.offsetHeight);
     /*刷新一下滚动条 ,然后跳转到对应位置*/
-    this.$refs.scroll.scrollTo(0, this.savedY, 0);
     this.$refs.scroll.refresh(); //必须刷新,better-scroll官方文档说keep-alive的缓存机制有可能导致计算高度出错,所以先刷新一下
+    this.$refs.scroll.scrollTo(0, this.savedY, 0);
   },
   deactivated() {
     /* 跳转前,获取当前的滚动位置并保存 */

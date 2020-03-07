@@ -30,7 +30,8 @@ export default {
     this.scroll = new BScroll(this.$refs.wrappeddiv, {
       probeType: this.ProbeType,
       pullUpLoad: this.PullUpLoad,
-      click: true
+      click: true,
+      observeDOM: false
     });
 
     /* 监听滚动事件 */
@@ -49,7 +50,7 @@ export default {
       this.scroll.finishPullUp();
     },
     scrollTo(x, y, time = 300) {
-      console.log('scrollTo',y,time);
+      console.log("scrollTo", y, time);
 
       this.scroll.scrollTo(x, y, time);
     },
