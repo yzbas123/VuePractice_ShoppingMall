@@ -4,7 +4,7 @@
     <div class="price_section">
       <span class="price">{{goodsInfor.price}}</span>
       <span class="oldprice">{{goodsInfor.oldPrice}}</span>
-      <span class="discount">{{goodsInfor.discountDesc}}</span>
+      <span class="discount" v-if="isDiscount">{{goodsInfor.discountDesc}}</span>
     </div>
     <div class="sellinfo">
       <span>{{goodsInfor.columns[0]}}</span>
@@ -26,6 +26,11 @@ export default {
   props: {
     goodsInfor: {
       type: Object
+    }
+  },
+  computed: {
+    isDiscount() {
+      return !(this.goodsInfor.discountDesc == "");
     }
   }
 };
