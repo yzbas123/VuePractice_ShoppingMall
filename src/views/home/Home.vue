@@ -126,7 +126,6 @@ export default {
       this.canDisplay = Math.abs(position.y) > this.tabctrlOffsetTop;
     },
     tapBackClick() {
-      console.log(1111);
       this.$refs.scroll.scrollTo(0, 0, 500);
     },
     tabItemClick(index) {

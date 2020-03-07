@@ -6,6 +6,7 @@ const Home = () => import('views/home/Home.vue');
 const Cart = () => import('views/cart/Cart.vue');
 const Category = () => import('views/category/Category.vue');
 const User = () => import('views/user/User.vue');
+const Detail = () => import('views/detail/Detail.vue');
 
 // 1. install plugin
 
@@ -32,6 +33,10 @@ const routes = [{
 {
     path: '/user',
     component: User
+},
+{
+    path: '/detail/:iid',
+    component: Detail
 }
 ];
 

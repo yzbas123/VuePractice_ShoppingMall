@@ -1,8 +1,6 @@
 <template>
-  <div class="goods">
-    <a :href="good.link">
-      <img :src="good.show.img" class="good_img" @load="imageLoaded" />
-    </a>
+  <div class="goods" @click="goodsItemClicked">
+    <img :src="good.show.img" class="good_img" @load="imageLoaded" />
     <div class="goods-info">
       <p>{{good.title}}</p>
       <span class="price">{{good.price}}</span>
@@ -25,6 +23,11 @@ export default {
     imageLoaded() {
       /* 图片加载完毕时，在事件总线中组成自定义事件 */
       this.$bus.$emit("imageLoaded");
+    },
+    goodsItemClicked() {
+      /* 跳转至详情界面 */
+      /* 同时携带商品iid号到详情页面 */
+      this.$router.push("/detail/" + this.good.iid);
     }
   }
 };
