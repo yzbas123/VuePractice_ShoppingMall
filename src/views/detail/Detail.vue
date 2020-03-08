@@ -2,115 +2,18 @@
   <div id="detail">
     <!-- 顶部导航栏 -->
     <detail-nav-bar></detail-nav-bar>
-    <scroll class="content">
+    <scroll class="content" ref="scroll" :probe-type="3">
+      <!-- @scrolling="scrolling"
+      :pull-up-load="true"
+      @pullingUp="pullupload"-->
       <!-- 轮播图 -->
       <detail-swiper :detail_swiper_imgs="detail_swiper_imgs"></detail-swiper>
       <!-- 商品信息 -->
-      <detail-goods-infor :goodsInfor="goodsInfor"></detail-goods-infor>
+      <goods-base-infor :goodsBaseInfor="goodsBaseInfor"></goods-base-infor>
       <!-- 商家信息 -->
       <detail-shop-infor :shopInfor="shopInfor"></detail-shop-infor>
-      <ul>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-      </ul>
+      <!-- 商品详情 -->
+      <goods-detail-infor :goodsDetail="goodsDetail" @allImageLoaded="allImageLoaded"></goods-detail-infor>
     </scroll>
   </div>
 </template>
@@ -118,26 +21,34 @@
 <script>
 import DetailNavBar from "./childview/DetailNavBar";
 import DetailSwiper from "./childview/DetailSwiper";
-import DetailGoodsInfor from "./childview/DetailGoodsInfor";
+import GoodsBaseInfor from "./childview/GoodsBaseInfor";
 import DetailShopInfor from "./childview/DetailShopInfor";
 import Scroll from "content/Scroll";
-import { getDetailData, GoodsDetailInfor, ShopInfor } from "network/detail";
+import GoodsDetailInfor from "./childview/GoodsDetailInfor";
+import {
+  getDetailData,
+  BaseInfor,
+  ShopInfor,
+  GoodsDetail
+} from "network/detail";
 export default {
   name: "Detail",
   components: {
     DetailNavBar,
     DetailSwiper,
-    DetailGoodsInfor,
+    GoodsBaseInfor,
     DetailShopInfor,
-    Scroll
+    Scroll,
+    GoodsDetailInfor
   },
   data() {
     return {
       iid: null,
       detail_swiper_imgs: [],
       /* 初值为{},保证DetailGoodsInfo不报错 */
-      goodsInfor: {},
-      shopInfor: {}
+      goodsBaseInfor: {},
+      shopInfor: {},
+      goodsDetail: {}
     };
   },
   created() {
@@ -150,28 +61,35 @@ export default {
         /* 解析数据存入对应的变量 */
         // 轮播图数据
         this.detail_swiper_imgs.push(...data.itemInfo.topImages);
-        // 商品的信息
-        this.goodsInfor = new GoodsDetailInfor(
+        // 商品基本信息
+        this.goodsBaseInfor = new BaseInfor(
           data.columns,
           data.itemInfo,
           data.shopInfo.services
         );
         // 商店的信息
         this.shopInfor = new ShopInfor(data.shopInfo);
+        // 商品详情
+        this.goodsDetail = new GoodsDetail(data.detailInfo);
       })
       .catch(err => {
         console.log(err);
       });
+  },
+  methods: {
+    allImageLoaded() {
+      this.$refs.scroll.refresh();
+    }
   }
 };
 </script>
 
 <style scoped>
 #detail {
-    height: 100vh;
-    position: relative;
-    z-index: 1;
-    background-color: #fff;
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+  background-color: #fff;
 }
 .content {
   height: 100vh;

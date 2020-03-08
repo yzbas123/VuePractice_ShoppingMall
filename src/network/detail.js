@@ -9,8 +9,8 @@ export function getDetailData(iid) {
     });
 }
 
-/* 定义一个类,用于封装待展示的商品详细信息 */
-export class GoodsDetailInfor {
+/* 定义一个类,用于封装待展示的商品基本信息 */
+export class BaseInfor {
     /* 思路:入口是少数几个对象,但是类中的属性可以详细零碎一点 */
     constructor(columns, itemInfo, services) {
         this.columns = columns;// 销量,收藏,快递品牌
@@ -41,5 +41,14 @@ export class ShopInfor {
         //     this.shopScoreBetters.push(item.isBetter);// 该店比其他商店平均评价相比是否更高
         //     this.shopScoreScores.push(item.score);// 评分的分数
         // });
+    }
+}
+
+/* 定义一个类,用于封装商品详情的各项数据 */
+export class GoodsDetail {
+    constructor(detailInfo) {
+        this.detialDesc = detailInfo.desc;
+        // 只用了一个穿着效果相关的数据
+        this.detailImage = detailInfo.detailImage[0]
     }
 }

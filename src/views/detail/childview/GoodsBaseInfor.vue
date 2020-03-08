@@ -1,20 +1,20 @@
 <template>
-  <div class="detail" v-if="Object.keys(goodsInfor).length !== 0">
-    <p class="title">{{goodsInfor.title}}</p>
+  <div class="detail" v-if="Object.keys(goodsBaseInfor).length !== 0">
+    <p class="title">{{goodsBaseInfor.title}}</p>
     <div class="price_section">
-      <span class="price">{{goodsInfor.price}}</span>
-      <span class="oldprice">{{goodsInfor.oldPrice}}</span>
-      <span class="discount" v-if="isDiscount">{{goodsInfor.discountDesc}}</span>
+      <span class="price">{{goodsBaseInfor.price}}</span>
+      <span class="oldprice">{{goodsBaseInfor.oldPrice}}</span>
+      <span class="discount" v-if="isDiscount">{{goodsBaseInfor.discountDesc}}</span>
     </div>
     <div class="sellinfo">
-      <span>{{goodsInfor.columns[0]}}</span>
-      <span>{{goodsInfor.columns[1]}}</span>
-      <span>{{goodsInfor.services[goodsInfor.services.length-1].name}}</span>
+      <span>{{goodsBaseInfor.columns[0]}}</span>
+      <span>{{goodsBaseInfor.columns[1]}}</span>
+      <span>{{goodsBaseInfor.services[goodsBaseInfor.services.length-1].name}}</span>
     </div>
     <div class="services">
-      <div class="service" v-for="index in (goodsInfor.services.length-1)" :key="index">
-        <img :src="goodsInfor.services[index-1].icon" />
-        <span>{{goodsInfor.services[index-1].name}}</span>
+      <div class="service" v-for="index in (goodsBaseInfor.services.length-1)" :key="index">
+        <img :src="goodsBaseInfor.services[index-1].icon" />
+        <span>{{goodsBaseInfor.services[index-1].name}}</span>
       </div>
     </div>
   </div>
@@ -22,15 +22,15 @@
 
 <script>
 export default {
-  name: "DetailGoodsInfor",
+  name: "GoodsBaseInfor",
   props: {
-    goodsInfor: {
+    goodsBaseInfor: {
       type: Object
     }
   },
   computed: {
     isDiscount() {
-      return !(this.goodsInfor.discountDesc == "");
+      return !(this.goodsBaseInfor.discountDesc == "");
     }
   }
 };
