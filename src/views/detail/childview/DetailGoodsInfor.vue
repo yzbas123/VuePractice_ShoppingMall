@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: "DetailGoodsInfo",
+  name: "DetailGoodsInfor",
   props: {
     goodsInfor: {
       type: Object
@@ -39,7 +39,7 @@ export default {
 <style scoped>
 .detail {
   padding: 0 8px 12px 8px;
-  box-shadow: 0 1px 0px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 5px 0px rgba(0, 0, 0, 0.07);
 }
 .title {
   margin: 10px 0px;
