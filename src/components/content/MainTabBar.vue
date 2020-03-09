@@ -40,8 +40,8 @@
 </template>
 
 <script>
-import TabBar from "common/tabbar/TabBar";
-import TabItem from "common/tabbar/TabItem";
+import TabBar from "c_common/tabbar/TabBar";
+import TabItem from "c_common/tabbar/TabItem";
 export default {
   components: {
     TabBar,

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { Swiper, SwiperItem } from "common/swiper";
+import { Swiper, SwiperItem } from "c_common/swiper";
 export default {
   components: {
     Swiper,

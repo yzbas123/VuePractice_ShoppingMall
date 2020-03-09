@@ -52,3 +52,24 @@ export class GoodsDetail {
         this.detailImage = detailInfo.detailImage[0]
     }
 }
+
+
+/* 定义类,用于封装商品参数 */
+export class GoodsParams {
+    constructor(itemParams) {
+        this.product_infors = itemParams.info.set;//商品参数构成的对象数组
+        this.size_tables = itemParams.rule.tables;// 商品尺码信息构成的字符串二维数组
+    }
+}
+
+
+/* 定义类 ,封装用户评价相关信息 */
+export class UserRate {
+    constructor(rate) {
+        this.commentSeconds = rate.list[0].created; //用户评论的时间,单位是秒
+        this.buyStyle = rate.list[0].style;// 用户购买的该商品的款式
+        this.content = rate.list[0].content;// 评论的内容
+        this.userAvatar = rate.list[0].user.avatar;//用户的头像,没错阿凡达就是头像的意思!
+        this.userName = rate.list[0].user.uname;// 用户名
+    }
+}

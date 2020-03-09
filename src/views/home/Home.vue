@@ -33,24 +33,26 @@
       <goods-list :goods="goods[currentType].list"></goods-list>
       <!-- 返回到前面的按钮 -->
     </scroll>
-    <tap-back @click.native="tapBackClick" v-show="canshow"></tap-back>
+    <tap-back @click.native="tapBackClicked" v-show="tapBackCanShow"></tap-back>
   </div>
 </template>
 
 <script>
 /* 界面相关的组件 */
-import NavBar from "common/navbar/NavBar";
+import NavBar from "c_common/navbar/NavBar";
 import HomeSwiper from "./childview/HomeSwiper.vue";
 import RecommendView from "./childview/RecommendView";
 import FeatureView from "./childview/FeatureView";
-import TabControl from "common/tabcontrol/TabControl";
-import GoodsList from "content/GoodsList";
-import Scroll from "content/Scroll";
-import TapBack from "content/TapBack";
+import TabControl from "c_common/tabcontrol/TabControl";
+import GoodsList from "c_content/GoodsList";
+import Scroll from "c_content/Scroll";
+import TapBack from "c_content/TapBack";
 
 /* 网络请求方法 */
 import { getHomeDatas, getHomeGoods } from "network/home.js";
 
+/* 混入 */
+import { TapBackMixin } from "common/mixin.js";
 export default {
   name: "Home",
   components: {
@@ -63,6 +65,7 @@ export default {
     Scroll,
     TapBack
   },
+  mixins: [TapBackMixin],
   data() {
     return {
       banners: [],
@@ -73,7 +76,6 @@ export default {
         sell: { page: 1, list: [] }
       },
       currentType: "pop",
-      canshow: false,
       tabctrlOffsetTop: 0,
       canDisplay: false,
       savedY: 0
@@ -118,15 +120,12 @@ export default {
     },
     scrolling(position) {
       /* 根据y轴上的位移来判断小按钮是否显示 */
-      this.canshow = Math.abs(position.y) > 1000;
+      this.tapBackCanShow = Math.abs(position.y) > 1000;
       /* 根据y轴上的位移 与 存储的tabcontrol的位置来判断tabcontrol1是否显示 */
       // console.log(position.y);
       // console.log(this.canDisplay);
 
       this.canDisplay = Math.abs(position.y) > this.tabctrlOffsetTop;
-    },
-    tapBackClick() {
-      this.$refs.scroll.scrollTo(0, 0, 500);
     },
     tabItemClick(index) {
       switch (index) {

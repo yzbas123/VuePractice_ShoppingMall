@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import MainTabBar from "content/MainTabBar";
+import MainTabBar from "c_content/MainTabBar";
 
 export default {
   name: "App",
