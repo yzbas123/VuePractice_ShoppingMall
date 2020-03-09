@@ -36,6 +36,8 @@ export default {
     },
     tabItemClicked(index) {
       this.currentIndex = index;
+      /* 发送事件到Detail组件中解决 */
+      this.$emit("navItemClicked", index);
     }
   }
 };

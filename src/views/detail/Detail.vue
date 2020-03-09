@@ -1,7 +1,7 @@
 <template>
   <div id="detail">
     <!-- 顶部导航栏 -->
-    <detail-nav-bar></detail-nav-bar>
+    <detail-nav-bar @navItemClicked="navItemClicked"></detail-nav-bar>
     <scroll class="content" ref="scroll" :probe-type="3" @scrolling="scrolling">
       <!-- @pullingUp="pullupload"
       :pull-up-load="true"-->
@@ -12,9 +12,9 @@
       <!-- 商家信息 -->
       <detail-shop-infor :shopInfor="shopInfor"></detail-shop-infor>
       <!-- 用户评论 -->
-      <user-rate-infor :userRate="userRate"></user-rate-infor>
+      <user-rate-infor :userRate="userRate" ref="rateInfor"></user-rate-infor>
       <!-- 商品参数 -->
-      <goods-params-infor :goodsParams="goodsParams"></goods-params-infor>
+      <goods-params-infor :goodsParams="goodsParams" ref="paramInfor"></goods-params-infor>
       <!-- 商品详情 -->
       <goods-detail-infor :goodsDetail="goodsDetail" @allImageLoaded="allImageLoaded"></goods-detail-infor>
     </scroll>
@@ -67,7 +67,8 @@ export default {
       shopInfor: {},
       goodsDetail: {},
       goodsParams: {},
-      userRate: {}
+      userRate: {},
+      navPositionY: [0, 0, 0, 0]
     };
   },
   created() {
@@ -101,11 +102,29 @@ export default {
   },
   methods: {
     allImageLoaded() {
+      /* 所有图片加载完成后,刷新一下滚动条高度 */
       this.$refs.scroll.refresh();
+      /* 更新所有组件的位置,这样点击nav的item时能够正常跳转到对应的位置 */
+      // 清空缓存
+      this.navPositionY = [];
+      // 商品的位置
+      this.navPositionY.push(0);
+      // 商品参数的位置
+      this.navPositionY.push(-this.$refs.paramInfor.$el.offsetTop);
+      // 用户评论的位置
+      this.navPositionY.push(-this.$refs.rateInfor.$el.offsetTop);
+      //
+      this.navPositionY.push(0);
     },
     scrolling(position) {
       /* 判断TapBack是否可以显示 */
       this.tapBackCanShow = Math.abs(position.y) > 1000;
+    },
+    navItemClicked(index) {
+      /* 跳转到对应内容的位置 */
+      console.log(this.navPositionY);
+
+      this.$refs.scroll.scrollTo(0, this.navPositionY[index], 200);
     }
   }
 };
@@ -120,6 +139,9 @@ export default {
   overflow: hidden;
 }
 .content {
+  position: absolute;
+  top: 44px;
+  bottom: 60px;
   height: 100vh;
   overflow: hidden;
 }
