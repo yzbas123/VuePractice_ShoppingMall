@@ -40,10 +40,10 @@ export default {
       this.$emit("scrolling", position);
     });
     /* 监听上拉加载事件 */
-    // this.scroll.on("pullingUp", () => {
-    //   /* 将上拉事件发送到Home事件 */
-    //   this.$emit("pullingUp");
-    // });
+    this.scroll.on("pullingUp", () => {
+      /* 将上拉事件发送到Home事件 */
+      this.$emit("pullingUp");
+    });
   },
   methods: {
     continuePullingup() {
