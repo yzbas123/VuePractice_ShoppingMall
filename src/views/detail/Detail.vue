@@ -41,7 +41,7 @@ import UserRateInfor from "./childview/UserRateInfor";
 import GoodsList from "c_content/GoodsList";
 import TapBack from "c_content/TapBack";
 /* 导入混入相关 */
-import { TapBackMixin } from "common/mixin.js";
+import { TapBackMixin, GoodsImgLoadMixin } from "common/mixin.js";
 /* 导入网路请求相关 */
 import {
   getDetailData,
@@ -66,7 +66,7 @@ export default {
     GoodsList,
     TapBack
   },
-  mixins: [TapBackMixin],
+  mixins: [TapBackMixin, GoodsImgLoadMixin],
   data() {
     return {
       iid: null,
@@ -78,8 +78,7 @@ export default {
       userRate: {},
       recommendData: [],
       navPositionY: [0, 0, 0, 0],
-      currentIndex: 0,
-      goodsImgsHandler: null
+      currentIndex: 0
     };
   },
   created() {
@@ -159,25 +158,7 @@ export default {
       console.log(this.navPositionY);
 
       this.$refs.scroll.scrollTo(0, this.navPositionY[index], 200);
-    },
-    debounce(cb, delay = 100) {
-      let timer = null;
-      return function(...args) {
-        if (timer) clearTimeout(timer);
-        timer = setTimeout(() => {
-          cb(args);
-        }, delay);
-      };
     }
-  },
-  mounted() {
-    // 组件挂载后，监听自定义事件
-    let refresh = this.debounce(this.$refs.scroll.refresh);
-    this.goodsImgsHandler = () => {
-      // 刷新scroll的长度
-      refresh();
-    };
-    this.$bus.$on("goodsListImgsLoaded", this.goodsImgsHandler);
   },
   destroyed() {
     /* 注销全局事件 */

@@ -50,9 +50,8 @@ import TapBack from "c_content/TapBack";
 
 /* 网络请求方法 */
 import { getHomeDatas, getHomeGoods } from "network/home.js";
-
 /* 混入 */
-import { TapBackMixin } from "common/mixin.js";
+import { TapBackMixin, GoodsImgLoadMixin } from "common/mixin.js";
 export default {
   name: "Home",
   components: {
@@ -65,7 +64,7 @@ export default {
     Scroll,
     TapBack
   },
-  mixins: [TapBackMixin],
+  mixins: [TapBackMixin, GoodsImgLoadMixin],
   data() {
     return {
       banners: [],
@@ -78,8 +77,7 @@ export default {
       currentType: "pop",
       tabctrlOffsetTop: 0,
       canDisplay: false,
-      savedY: 0,
-      goodsImgsHandler: null
+      savedY: 0
     };
   },
   created() {
@@ -92,29 +90,7 @@ export default {
     //请求热销类商品数据
     this.getHomeGoodsLocal("sell");
   },
-  mounted() {
-    const refresh = this.debounce(this.$refs.scroll.refresh, 500);
-    // 组件挂载后，监听自定义事件
-    this.goodsImgsHandler = () => {
-      // 刷新scroll的长度
-      refresh();
-    };
-    this.$bus.$on("goodsListImgsLoaded", this.goodsImgsHandler);
-  },
   methods: {
-    debounce(cb, delay) {
-      let timer = null;
-      return function(...args) {
-        if (timer) {
-          clearTimeout(timer);
-        }
-        timer = setTimeout(() => {
-          // cb.apply(this, args);
-          cb(args);
-        }, delay);
-      };
-    },
-
     pullupload() {
       /* 请求新的数据填入列表 */
       this.getHomeGoodsLocal(this.currentType);
@@ -124,9 +100,6 @@ export default {
       /* 根据y轴上的位移来判断小按钮是否显示 */
       this.tapBackCanShow = Math.abs(position.y) > 1000;
       /* 根据y轴上的位移 与 存储的tabcontrol的位置来判断tabcontrol1是否显示 */
-      // console.log(position.y);
-      // console.log(this.canDisplay);
-
       this.canDisplay = Math.abs(position.y) > this.tabctrlOffsetTop;
     },
     tabItemClick(index) {

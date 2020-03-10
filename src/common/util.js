@@ -40,3 +40,13 @@ function padLeftZero(str) {
     return ('00' + str).substr(str.length);
 }
 
+export function debounce(cb, delay = 200) {
+    let timer = null;
+    return function (...args) {
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+            cb(args);
+        }, delay);
+    }
+}
+
