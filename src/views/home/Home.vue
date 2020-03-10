@@ -78,7 +78,8 @@ export default {
       currentType: "pop",
       tabctrlOffsetTop: 0,
       canDisplay: false,
-      savedY: 0
+      savedY: 0,
+      goodsImgsHandler: null
     };
   },
   created() {
@@ -94,10 +95,11 @@ export default {
   mounted() {
     const refresh = this.debounce(this.$refs.scroll.refresh, 500);
     // 组件挂载后，监听自定义事件
-    this.$bus.$on("goodsListImgsLoaded", () => {
+    this.goodsImgsHandler = () => {
       // 刷新scroll的长度
       refresh();
-    });
+    };
+    this.$bus.$on("goodsListImgsLoaded", this.goodsImgsHandler);
   },
   methods: {
     debounce(cb, delay) {
@@ -192,6 +194,9 @@ export default {
   deactivated() {
     /* 跳转前,获取当前的滚动位置并保存 */
     this.savedY = this.$refs.scroll.getPositionY();
+    /* 跳转前注销全局总线中的事件,防止不同组件中的相同事件被这里处理 */
+    /* $off参数:1.事件名称 2. 事件处理函数 ,如果不传入第二个参数,则会注销全局中的所有这个事件 */
+    this.$bus.$off("goodsListImgsLoaded", this.goodsImgsHandler);
   }
 };
 </script>

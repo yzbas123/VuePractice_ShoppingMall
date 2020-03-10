@@ -78,7 +78,8 @@ export default {
       userRate: {},
       recommendData: [],
       navPositionY: [0, 0, 0, 0],
-      currentIndex: 0
+      currentIndex: 0,
+      goodsImgsHandler: null
     };
   },
   created() {
@@ -172,10 +173,15 @@ export default {
   mounted() {
     // 组件挂载后，监听自定义事件
     let refresh = this.debounce(this.$refs.scroll.refresh);
-    this.$bus.$on("goodsListImgsLoaded", () => {
+    this.goodsImgsHandler = () => {
       // 刷新scroll的长度
       refresh();
-    });
+    };
+    this.$bus.$on("goodsListImgsLoaded", this.goodsImgsHandler);
+  },
+  destroyed() {
+    /* 注销全局事件 */
+    this.$bus.$off("goodsListImgsLoaded", this.goodsImgsHandler);
   }
 };
 </script>
