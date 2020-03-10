@@ -1,7 +1,7 @@
 <template>
   <div id="detail">
     <!-- 顶部导航栏 -->
-    <detail-nav-bar @navItemClicked="navItemClicked"></detail-nav-bar>
+    <detail-nav-bar @navItemClicked="navItemClicked" ref="nav"></detail-nav-bar>
     <scroll class="content" ref="scroll" :probe-type="3" @scrolling="scrolling">
       <!-- @pullingUp="pullupload"
       :pull-up-load="true"-->
@@ -16,10 +16,10 @@
         :goodsDetail="goodsDetail"
         @goodsDetailImagesLoaded="goodsDetailImagesLoaded"
       ></goods-detail-infor>
-      <!-- 用户评论 -->
-      <user-rate-infor :userRate="userRate" ref="rateInfor"></user-rate-infor>
       <!-- 商品参数 -->
       <goods-params-infor :goodsParams="goodsParams" ref="paramInfor"></goods-params-infor>
+      <!-- 用户评论 -->
+      <user-rate-infor :userRate="userRate" ref="rateInfor"></user-rate-infor>
       <!-- 推荐商品信息 -->
       <goods-list :goods="recommendData" ref="recommendInfo"></goods-list>
     </scroll>
@@ -77,7 +77,8 @@ export default {
       goodsParams: {},
       userRate: {},
       recommendData: [],
-      navPositionY: [0, 0, 0, 0]
+      navPositionY: [0, 0, 0, 0],
+      currentIndex: 0
     };
   },
   created() {
@@ -139,13 +140,33 @@ export default {
       this.navPositionY.push(-this.$refs.rateInfor.$el.offsetTop);
       //
       this.navPositionY.push(-this.$refs.recommendInfo.$el.offsetTop);
-      // console.log(this.$refs.scroll.scroll.maxScrollY);
-      // console.log(this.$refs.scroll.$el.children[0].offsetHeight);
-      // console.log(this.$refs.scroll.$el.children[0].offsetHeight-Math.abs(this.$refs.scroll.scroll.maxScrollY));
     },
     scrolling(position) {
       /* 判断TapBack是否可以显示 */
-      this.tapBackCanShow = Math.abs(position.y) > 1000;
+      position.y = Math.abs(position.y);
+      this.tapBackCanShow = position.y > 1000;
+      /* 位置判断,设置对应navbar的currentIndex */
+      let length = this.navPositionY.length;
+      let lastIndex = length - 1;
+      for (let i = 0; i < length; i++) {
+        let e1 = Math.abs(this.navPositionY[i]);
+        let e2 = Math.abs(this.navPositionY[i + 1]);
+        /* 首先是两个大条件必须满足 */
+        /* 1.当前索引值发生了改变,这意味着一开始的0是不会进入下面的判断里的,这不影响因为nav的currentIndex处置也是0 */
+        /* 2. 满足下面两个条件中的其中之一便算满足*/
+          // 下面说的阈值就是不同区域的offsetTop,顺序是商品区域,参数区域,评论区域,推荐区域
+          
+          // 2.1 如果不是最后一个元素,且当前滚动的位置大于等于前一个阈值,小于后一个阈值
+          // 2.2 如果是最后一个元素,且当前滚动的位置大于等于最后一个阈值
+        if (
+          this.currentIndex != i &&
+          ((i < lastIndex && position.y >= e1 && position.y < e2) ||
+            (i == lastIndex && position.y >= e1))
+        ) {
+          this.currentIndex = i;
+          this.$refs.nav.currentIndex = this.currentIndex;
+        }
+      }
     },
     navItemClicked(index) {
       /* 跳转到对应内容的位置 */
