@@ -30,7 +30,7 @@ export default {
   methods: {
     imageLoad() {
       if (++this.count == this.imgLength) {
-        this.$emit("allImageLoaded");
+        this.$emit("goodsDetailImagesLoaded");
       }
     }
   },

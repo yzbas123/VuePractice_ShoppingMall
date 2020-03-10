@@ -8,6 +8,12 @@ export function getDetailData(iid) {
         }
     });
 }
+// 获取推荐商品
+export function getRecommendData() {
+    return request({
+        url: '/recommend',
+    });
+}
 
 /* 定义一个类,用于封装待展示的商品基本信息 */
 export class BaseInfor {

@@ -94,7 +94,7 @@ export default {
   mounted() {
     const refresh = this.debounce(this.$refs.scroll.refresh, 500);
     // 组件挂载后，监听自定义事件
-    this.$bus.$on("imageLoaded", () => {
+    this.$bus.$on("goodsListImgsLoaded", () => {
       // 刷新scroll的长度
       refresh();
     });

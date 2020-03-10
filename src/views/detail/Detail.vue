@@ -11,12 +11,17 @@
       <goods-base-infor :goodsBaseInfor="goodsBaseInfor"></goods-base-infor>
       <!-- 商家信息 -->
       <detail-shop-infor :shopInfor="shopInfor"></detail-shop-infor>
+      <!-- 商品详情 -->
+      <goods-detail-infor
+        :goodsDetail="goodsDetail"
+        @goodsDetailImagesLoaded="goodsDetailImagesLoaded"
+      ></goods-detail-infor>
       <!-- 用户评论 -->
       <user-rate-infor :userRate="userRate" ref="rateInfor"></user-rate-infor>
       <!-- 商品参数 -->
       <goods-params-infor :goodsParams="goodsParams" ref="paramInfor"></goods-params-infor>
-      <!-- 商品详情 -->
-      <goods-detail-infor :goodsDetail="goodsDetail" @allImageLoaded="allImageLoaded"></goods-detail-infor>
+      <!-- 推荐商品信息 -->
+      <goods-list :goods="recommendData" ref="recommendInfo"></goods-list>
     </scroll>
     <!-- 回到顶部的按钮 -->
     <tap-back v-show="tapBackCanShow" @click.native="tapBackClicked"></tap-back>
@@ -33,6 +38,7 @@ import Scroll from "c_content/Scroll";
 import GoodsDetailInfor from "./childview/GoodsDetailInfor";
 import GoodsParamsInfor from "./childview/GoodsParamsInfor";
 import UserRateInfor from "./childview/UserRateInfor";
+import GoodsList from "c_content/GoodsList";
 import TapBack from "c_content/TapBack";
 /* 导入混入相关 */
 import { TapBackMixin } from "common/mixin.js";
@@ -43,7 +49,8 @@ import {
   ShopInfor,
   GoodsDetail,
   GoodsParams,
-  UserRate
+  UserRate,
+  getRecommendData
 } from "network/detail";
 export default {
   name: "Detail",
@@ -56,6 +63,7 @@ export default {
     GoodsDetailInfor,
     GoodsParamsInfor,
     UserRateInfor,
+    GoodsList,
     TapBack
   },
   mixins: [TapBackMixin],
@@ -68,6 +76,7 @@ export default {
       goodsDetail: {},
       goodsParams: {},
       userRate: {},
+      recommendData: [],
       navPositionY: [0, 0, 0, 0]
     };
   },
@@ -99,9 +108,24 @@ export default {
       .catch(err => {
         console.log(err);
       });
+    // 获取推荐数据
+    getRecommendData()
+      .then(res => {
+        // 用变量缓存数据
+
+        this.recommendData = res.data.list;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    // 组件挂载后，监听自定义事件
+    this.$bus.$on("goodsListImgsLoaded", () => {
+      // 刷新scroll的长度
+      this.$refs.scroll.refresh();
+    });
   },
   methods: {
-    allImageLoaded() {
+    goodsDetailImagesLoaded() {
       /* 所有图片加载完成后,刷新一下滚动条高度 */
       this.$refs.scroll.refresh();
       /* 更新所有组件的位置,这样点击nav的item时能够正常跳转到对应的位置 */
@@ -114,7 +138,10 @@ export default {
       // 用户评论的位置
       this.navPositionY.push(-this.$refs.rateInfor.$el.offsetTop);
       //
-      this.navPositionY.push(0);
+      this.navPositionY.push(-this.$refs.recommendInfo.$el.offsetTop);
+      // console.log(this.$refs.scroll.scroll.maxScrollY);
+      // console.log(this.$refs.scroll.$el.children[0].offsetHeight);
+      // console.log(this.$refs.scroll.$el.children[0].offsetHeight-Math.abs(this.$refs.scroll.scroll.maxScrollY));
     },
     scrolling(position) {
       /* 判断TapBack是否可以显示 */
