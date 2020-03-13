@@ -24,6 +24,7 @@ export class BaseInfor {
         this.discountDesc = itemInfo.discountDesc;//打折描述
         this.price = itemInfo.price;//现在价格,字符串
         this.oldPrice = itemInfo.oldPrice;//以前的价格,字符串
+        this.lowNowPrice = itemInfo.lowNowPrice;//现在的最低价格
         this.services = services;//服务相关:退货补运费,全国包邮,7天无理由退货,72小时发货
     }
 }

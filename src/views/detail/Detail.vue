@@ -2,9 +2,8 @@
   <div id="detail">
     <!-- 顶部导航栏 -->
     <detail-nav-bar @navItemClicked="navItemClicked" ref="nav"></detail-nav-bar>
+    <!-- 以下的内容被scroll包裹 -->
     <scroll class="content" ref="scroll" :probe-type="3" @scrolling="scrolling">
-      <!-- @pullingUp="pullupload"
-      :pull-up-load="true"-->
       <!-- 轮播图 -->
       <detail-swiper :detail_swiper_imgs="detail_swiper_imgs"></detail-swiper>
       <!-- 商品信息 -->
@@ -25,6 +24,8 @@
     </scroll>
     <!-- 回到顶部的按钮 -->
     <tap-back v-show="tapBackCanShow" @click.native="tapBackClicked"></tap-back>
+    <!-- 底部工具栏 -->
+    <bottom-tool-bar @add2Cart="add2Cart"></bottom-tool-bar>
   </div>
 </template>
 
@@ -40,6 +41,7 @@ import GoodsParamsInfor from "./childview/GoodsParamsInfor";
 import UserRateInfor from "./childview/UserRateInfor";
 import GoodsList from "c_content/GoodsList";
 import TapBack from "c_content/TapBack";
+import BottomToolBar from "./childview/BottomToolBar";
 /* 导入混入相关 */
 import { TapBackMixin, GoodsImgLoadMixin } from "common/mixin.js";
 /* 导入网路请求相关 */
@@ -64,7 +66,8 @@ export default {
     GoodsParamsInfor,
     UserRateInfor,
     GoodsList,
-    TapBack
+    TapBack,
+    BottomToolBar
   },
   mixins: [TapBackMixin, GoodsImgLoadMixin],
   data() {
@@ -158,6 +161,24 @@ export default {
       console.log(this.navPositionY);
 
       this.$refs.scroll.scrollTo(0, this.navPositionY[index], 200);
+    },
+    // 加入购物车
+    add2Cart() {
+      // 获取购物车界面展示的商品信息
+      const product = {
+        // 商品图片
+        img: this.goodsDetail.detailImage.list[0],
+        // 商品标题
+        title: this.goodsBaseInfor.title,
+        // 商品描述
+        desc: this.goodsDetail.detialDesc,
+        // 商品价格
+        price: this.goodsBaseInfor.lowNowPrice,
+        // 商品iid
+        iid: this.iid
+      };
+      // 提交变动,并传入参数product到payload中
+      this.$store.commit("addProuct2Cart", { product });
     }
   },
   destroyed() {
@@ -178,8 +199,7 @@ export default {
 .content {
   position: absolute;
   top: 44px;
-  bottom: 60px;
-  height: 100vh;
+  bottom: 49px;
   overflow: hidden;
 }
 </style>
