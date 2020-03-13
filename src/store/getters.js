@@ -7,5 +7,8 @@ export default {
             totalCnt += item.count;
         }
         return totalCnt;
+    },
+    getCartList(state) {
+        return state.cartList;
     }
 }
