@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import mutations from './mutations'
+import actions from './actions'
 
 
 // 1.安装插件
@@ -13,25 +15,8 @@ const options = {
         // 商品对象数组,用于存放添加到购物车中的商品
         cartList: []
     },
-    mutations: {
-        addProuct2Cart(state, payload) {
-            let product = payload.product;
-            // 判断加入的商品是否已在购物车中
-            let oldProduct = state.cartList.find(item => {
-                return item.iid == product.iid
-            });
-            // 如果有,将其数量加1
-            if (oldProduct) {
-                oldProduct.count++;
-            }
-            // 否则加入购物车,并将其数量设置为1
-            else {
-                product.count = 1;
-                state.cartList.push(product);
-            }
-        }
-    },
-    getter: {}
+    mutations,
+    actions
 };
 // 2.2 调用Vuex的Store构造函数实例化Store
 const store = new Vuex.Store(options);

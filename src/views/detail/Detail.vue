@@ -178,7 +178,7 @@ export default {
         iid: this.iid
       };
       // 提交变动,并传入参数product到payload中
-      this.$store.commit("addProuct2Cart", { product });
+      this.$store.dispatch("addProuct2Cart", product);
     }
   },
   destroyed() {
