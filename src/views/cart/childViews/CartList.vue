@@ -1,6 +1,5 @@
 <template>
   <div id="cart_list" v-if="getCartList.length!=0">
-    <!-- <div v-for="(item,index) in getCartList" :key="index">{{item}}</div> -->
     <cart-list-item v-for="(item,index) in getCartList" :key="index" :cartItemInfor="item"></cart-list-item>
   </div>
 </template>

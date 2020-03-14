@@ -44,6 +44,8 @@ import TapBack from "c_content/TapBack";
 import BottomToolBar from "./childview/BottomToolBar";
 /* 导入混入相关 */
 import { TapBackMixin, GoodsImgLoadMixin } from "common/mixin.js";
+/* 导入vuex相关功能函数 */
+import { mapActions } from "vuex";
 /* 导入网路请求相关 */
 import {
   getDetailData,
@@ -124,6 +126,7 @@ export default {
       });
   },
   methods: {
+    ...mapActions(["addProuct2Cart"]),
     goodsDetailImagesLoaded() {
       /* 所有图片加载完成后,刷新一下滚动条高度 */
       this.$refs.scroll.refresh();
@@ -178,7 +181,11 @@ export default {
         iid: this.iid
       };
       // 提交变动,并传入参数product到payload中
-      this.$store.dispatch("addProuct2Cart", product);
+      // this.$store.dispatch("addProuct2Cart", product).then(res => {
+      this.addProuct2Cart(product).then(res => {
+        // console.log(res);
+        this.$toast.show(res,2000);
+      });
     }
   },
   destroyed() {

@@ -7,7 +7,7 @@
     <div class="totalcnt">
       <span>合计:￥{{totalMoney}}</span>
     </div>
-    <div class="calculate">去计算({{totalCnt}})</div>
+    <div class="calculate" @click="calClicked">去计算({{totalCnt}})</div>
   </div>
 </template>
 
@@ -28,7 +28,8 @@ export default {
         })
         .reduce((pre, crtValue) => {
           return (pre += crtValue.price * crtValue.count);
-        }, 0).toFixed(2);
+        }, 0)
+        .toFixed(2);
     },
     totalCnt() {
       return this.getCartList
@@ -59,6 +60,11 @@ export default {
         this.getCartList.forEach(e => {
           e.checked = true;
         });
+      }
+    },
+    calClicked() {
+      if (this.totalCnt == 0) {
+        this.$toast.show("请选择待购买的商品", 2000);
       }
     }
   }
