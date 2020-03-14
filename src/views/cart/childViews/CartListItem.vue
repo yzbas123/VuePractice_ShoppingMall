@@ -2,7 +2,8 @@
   <div id="cart_list_item">
     <!-- 勾选框部分 -->
     <div class="selector">
-      <input type="checkbox" />
+      <!-- <input type="checkbox" /> -->
+      <check-button @click.native="checkBtnClicked" :isChecked="cartItemInfor.checked"></check-button>
     </div>
     <!-- 商品图片 -->
     <div class="itemImg">
@@ -21,6 +22,7 @@
 </template>
 
 <script>
+import CheckButton from "./CheckButton";
 export default {
   name: "CartListItem",
   props: {
@@ -30,6 +32,15 @@ export default {
   },
   data() {
     return {};
+  },
+  components: {
+    CheckButton
+  },
+  methods: {
+    checkBtnClicked() {
+      // 修改数据模型中的属性
+      this.cartItemInfor.checked = !this.cartItemInfor.checked;
+    }
   }
 };
 </script>

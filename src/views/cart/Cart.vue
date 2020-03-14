@@ -8,6 +8,8 @@
       <!-- 商品清单 -->
       <cart-list class="cart_list"></cart-list>
     </scroll>
+    <!-- 底部工具栏 -->
+    <cart-bottom-bar></cart-bottom-bar>
   </div>
 </template>
 
@@ -16,6 +18,7 @@
 import NavBar from "c_common/navbar/NavBar";
 import Scroll from "c_content/Scroll";
 import CartList from "./childViews/CartList";
+import CartBottomBar from './childViews/CartBottomBar'
 /* 导入工具函数 */
 import { mapGetters } from "vuex";
 export default {
@@ -23,7 +26,8 @@ export default {
   components: {
     NavBar,
     Scroll,
-    CartList
+    CartList,
+    CartBottomBar
   },
   computed: {
     ...mapGetters(["totalCartCnt"])
@@ -42,9 +46,9 @@ export default {
 }
 .wrapper {
   width: 100%;
-  position: fixed;
+  position: absolute;
   top: 44px;
-  bottom: 49px;
+  bottom: 98px;
   overflow: hidden;
 }
 .cart_list {

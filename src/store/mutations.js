@@ -6,6 +6,8 @@ export default {
     },
     // 将新产品加入购物车
     [ADD_NEW_PRODUCT](state, payload) {
+        // 新增的商品,设置checked属性,默认值为true
+        payload.checked = true;
         state.cartList.push(payload);
     }
 }
