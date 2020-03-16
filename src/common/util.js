@@ -30,15 +30,16 @@ export function formatDate(date, fmt) {
             let str = o[k] + '';
             /* 然后执行匹配内容替换模板 */
             /* 如果模板是单位数,那么进行补零处理 */
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str));
+            // fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str));
+            fmt = fmt.replace(RegExp.$1, str.padStart(2, '0'));
         }
     }
     return fmt;
 }
 
-function padLeftZero(str) {
-    return ('00' + str).substr(str.length);
-}
+// function padLeftZero(str) {
+//     return ('00' + str).substr(str.length);
+// }
 
 export function debounce(cb, delay = 200) {
     let timer = null;
