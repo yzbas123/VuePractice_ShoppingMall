@@ -29,7 +29,7 @@ export function formatDate(date, fmt) {
             /* 满足条件的子串转换为字符串 */
             let str = o[k] + '';
             /* 然后执行匹配内容替换模板 */
-            /* 如果模板不是单位数,那么进行补零处理 */
+            /* 如果模板是单位数,那么进行补零处理 */
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str));
         }
     }
